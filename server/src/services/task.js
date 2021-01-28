@@ -1,8 +1,9 @@
 const repository = require('../repositories/task');
+const { getNextDayDate } = require('../utils/util');
 
 
-const getAll = async () => {
-    const tasks = await repository.fetchAll();
+const getAll = async (search) => {
+    const tasks = await repository.fetchAll(search);
     const result = {}
     let t = {}
     for (task of tasks) {
@@ -45,8 +46,32 @@ const updateById = async (update) => {
     return await repository.updateById(id, data);
 };
 
+const addByStatusId = async (statusId, description) => {
+    const data = {
+        user_id: 1, //!TODO don't harcode user_id
+        status_id: statusId,
+        description,
+        due_date: getNextDayDate()
+    }
+    const newTask = await repository.insert(data);
+    console.log(newTask[0])
+    const task = await repository.findById(newTask[0]);
+
+    return {
+        id: task.id,
+        name: task.description,
+        user: {
+            id: task.user_id,
+            name: task.user_name,
+            email: task.email
+        },
+        dueDate: task.dueDate
+    }
+};
+
 module.exports = {
     getAll,
-    updateById
+    updateById,
+    addByStatusId
 };
   

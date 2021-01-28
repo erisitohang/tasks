@@ -8,5 +8,6 @@ module.exports = (app) => {
   app.use('/api', router);
   router.get('/task', task.list);
   router.put('/task', task.update);
+  router.post('/task', task.store);
   router.get('/user', user.list);
 };

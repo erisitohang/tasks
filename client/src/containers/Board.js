@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Column from '../components/Column'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { Context } from '../Store'
@@ -6,6 +6,7 @@ import { getList } from '../services/tasks'
 
 function Board () {
   const [data, setData] = useContext(Context)
+  const [search, setSearch] = useState('')
   const onDragEnd = ({ source, destination }) => {
     // Make sure we have a valid destination
     if (destination === undefined || destination === null) return null
@@ -80,8 +81,17 @@ function Board () {
       return null
     }
   }
+  const handleKeyDown = (event, callback) => {
+    if (event.keyCode === 13) {
+      callback(event)
+    }
+  }
+  const handleTaskSearch = async (e) => {
+    e.preventDefault()
+    setSearch(e.target.value)
+  }
   useEffect(() => {
-    getList().then(response => {
+    getList(search).then(response => {
       const data = {
         inEdit: {
           cIndex: -1,
@@ -91,12 +101,15 @@ function Board () {
       }
       setData(data)
     })
-  }, [])
+  }, [search])
 
   const searchStyle = { width: '20rem', background: '#F2F1F9', border: 'none', padding: '0.5rem' }
   return (
       <div>
-        <input style={searchStyle} type="text" placeholder={'search task'} />
+        <input
+        style={searchStyle} type="text" placeholder={'search task'}
+        onKeyDown={(e) => handleKeyDown(e, handleTaskSearch)}
+        />
       <DragDropContext onDragEnd={onDragEnd}>
         <div
           style={{

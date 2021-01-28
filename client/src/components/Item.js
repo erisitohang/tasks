@@ -115,7 +115,6 @@ const Item = ({ cIndex, tIndex }) => {
         setStartDate(req.due_date)
       }
       if ('user_id' in req) {
-        console.log('Item:', params)
         newData.columns[cId].tasks[tIndex].user = params
       }
       setData(newData)

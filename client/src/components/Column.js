@@ -6,6 +6,7 @@ import Item from './Item'
 import styled from 'styled-components'
 import { Context } from '../Store'
 import Button from './Button'
+import { add } from '../services/tasks'
 
 const ListColumn = styled.div`
   width: 268px;
@@ -45,7 +46,7 @@ const StyledTextarea = styled(Textarea)`
   resize: none;
 `
 const Column = ({ id }) => {
-  const [data] = useContext(Context)
+  const [data, setData] = useContext(Context)
   const [newTaskFormIsOpen, setNewTaskFormIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [newTaskTitle, setNewTaskTitle] = useState('')
@@ -68,7 +69,17 @@ const Column = ({ id }) => {
   }
   const onSubmitTask = async () => {
     setIsLoading(true)
-    setIsLoading(false)
+    const insert = {
+      id,
+      description: newTaskTitle
+    }
+    add(insert).then(response => {
+      setNewTaskTitle('')
+      const newData = Object.assign({}, data)
+      newData.columns[id].tasks.push(response)
+      setData(newData)
+      setIsLoading(false)
+    })
   }
 
   return (
