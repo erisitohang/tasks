@@ -5,7 +5,7 @@ exports.up = function(knex) {
         table.bigInteger('user_id').unsigned().notNullable();
         table.bigInteger('status_id').unsigned().notNullable();
         table.text('description').notNullable();
-        table.bigInteger('order').notNullable().defaultTo(0);
+        table.date('due_date');
         table.timestamps(true, true)
     });
 };

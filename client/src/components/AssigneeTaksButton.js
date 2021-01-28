@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { FaEdit } from 'react-icons/fa'
+import { FaUser } from 'react-icons/fa'
 
 const StyledButton = styled.button`
   position: relative;
@@ -20,12 +20,12 @@ const StyledButton = styled.button`
   }
 `
 
-const EditTaskButton = ({ ...props }) => {
+const AssigneeTaksButton = ({ ...props }) => {
   return (
     <StyledButton {...props}>
-      <FaEdit size={18} />
+      <FaUser size={18} />
     </StyledButton>
   )
 }
 
-export default EditTaskButton
+export default AssigneeTaksButton
