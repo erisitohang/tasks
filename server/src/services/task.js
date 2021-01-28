@@ -6,11 +6,11 @@ const { APP_SECRET } = require('../configs/env');
 
 const getAll = async () => {
     const tasks = await repository.fetchAll();
-    const columns = {}
+    const result = {}
     let t = {}
     for (task of tasks) {
-        if (!(task.status_id in columns)) {
-            columns[task.status_id] = {
+        if (!(task.status_id in result)) {
+            result[task.status_id] = {
                 id: task.status_id,
                 name: task.status,
                 tasks:[]
@@ -21,19 +21,15 @@ const getAll = async () => {
             name: task.description,
             user: {
                 id: task.user_id,
-                name: task.user_name
+                name: task.user_name,
+                email: task.email
             },
             dueDate: task.dueDate
         }
-        console.log(t)
-        columns[task.status_id].tasks.push(t)
+        result[task.status_id].tasks.push(t)
     }
     return  {
-        inEdit: {
-            cIndex: -1,
-            tIndex: -1
-          },
-          columns
+        data: result
     };
 };
 

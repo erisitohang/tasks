@@ -1,10 +1,10 @@
 const knex = require('knex')(require('../configs/db'));
 
-const findByEmail = async (email) => {
-  const user = await knex('users').where({ email }).first();
-  return user;
+const fetchAll = async () => {
+  const users = await knex.select('id', 'name', 'email').from('users') ;
+  return users;
 };
 
 module.exports = {
-  findByEmail,
+  fetchAll,
 };

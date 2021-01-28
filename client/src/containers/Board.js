@@ -81,8 +81,15 @@ function Board () {
     }
   }
   useEffect(() => {
-    getList().then(items => {
-      setData(items)
+    getList().then(response => {
+      const data = {
+        inEdit: {
+          cIndex: -1,
+          tIndex: -1
+        },
+        columns: response.data
+      }
+      setData(data)
     })
   }, [])
 

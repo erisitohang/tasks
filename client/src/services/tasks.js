@@ -7,7 +7,6 @@ export function getList () {
 }
 
 export function update (data) {
-  console.log(data)
   return fetch(`${REACT_APP_API_URI}/task`, {
     method: 'put',
     headers: {

@@ -12,6 +12,7 @@ const fetchAll = async (email) => {
     id: 'tasks.id',
     description: 'tasks.description',
     dueDate: 'tasks.due_date',
+    email: 'users.email',
   })
   .orderBy('tasks.id', 'asc')
   return tasks;

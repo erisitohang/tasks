@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useContext, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Draggable } from 'react-beautiful-dnd'
@@ -66,8 +65,7 @@ const StyledTextarea = styled(Textarea)`
 const Item = ({ cIndex, tIndex }) => {
   const [data, setData] = useContext(Context)
   const { tasks } = data.columns[cIndex]
-  // eslint-disable-next-line camelcase
-  const { name, id, dueDate } = tasks[tIndex]
+  const { name, id, dueDate, user } = tasks[tIndex]
   const [tempTaskTitle, setTempTaskTitle] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
   const [selectedValue, setSelectedValue] = useState('')
@@ -84,9 +82,10 @@ const Item = ({ cIndex, tIndex }) => {
   const openListUser = (event, columnId, taskId) => {
     setOpenDialog(true)
   }
-  const handleCloseDialogUser = (value) => {
+  const handleCloseDialogUser = (user) => {
     setOpenDialog(false)
-    setSelectedValue(value)
+    setSelectedValue(user.id)
+    onEditTask({ user_id: user.id }, user)
   }
   const handleTaskEditorChange = (event) => {
     setTempTaskTitle(event.target.value)
@@ -98,17 +97,11 @@ const Item = ({ cIndex, tIndex }) => {
   }
   const handleTaskEdit = async (e) => {
     e.preventDefault()
-    if (tempTaskTitle.length < 1) {
-      // onDeleteCard(cardInEdit)
-    } else {
-      onEditTask({ description: tempTaskTitle })
-    }
+    onEditTask({ description: tempTaskTitle })
   }
 
-  const onEditTask = async (req) => {
-    const { tasks } = data.columns[cIndex]
+  const onEditTask = async (req, params = null) => {
     const cId = data.columns[cIndex].id
-    const { id } = tasks[tIndex]
     update({ id, ...req }).then((result) => {
       const newData = Object.assign({}, data)
       const newInEdit = { cIndex: -1, tIndex: -1 }
@@ -120,6 +113,10 @@ const Item = ({ cIndex, tIndex }) => {
       if ('due_date' in req) {
         newData.columns[cId].tasks[tIndex].dueDate = req.due_date
         setStartDate(req.due_date)
+      }
+      if ('user_id' in req) {
+        console.log('Item:', params)
+        newData.columns[cId].tasks[tIndex].user = params
       }
       setData(newData)
     })
@@ -157,7 +154,12 @@ const Item = ({ cIndex, tIndex }) => {
               <ButtonWrapper>
                 <EditTaskButton onClick={(e) => openTaskEditor(e, cIndex, tIndex)} />
                 <AssigneeTaksButton onClick={(e) => openListUser(e, cIndex, tIndex)} />
-                <UserDialog selectedValue={selectedValue} open={openDialog} onClose={handleCloseDialogUser} />
+                <UserDialog
+                  selectedValue={selectedValue}
+                  open={openDialog}
+                  onClose={handleCloseDialogUser}
+                  user={user}
+                />
                 <DatePicker
                 selected={startDate}
                 onChange={date => handleTaskUpdateDate(date)}
