@@ -8,7 +8,6 @@ if (fs.existsSync(envFile)) {
 }
 
 module.exports = {
-  APP_SECRET: process.env.APP_URL || 'super-secret-key-crate-api',
   DB_HOST: process.env.DB_HOST || 'db',
   DB_USERNAME: process.env.DB_USERNAME || 'postgres',
   DB_PASSWORD: process.env.DB_PASSWORD || 'postgres',

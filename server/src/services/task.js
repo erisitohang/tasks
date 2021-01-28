@@ -1,7 +1,4 @@
-const bcrypt = require('bcryptjs');
 const repository = require('../repositories/task');
-const jwt = require('jsonwebtoken');
-const { APP_SECRET } = require('../configs/env');
 
 
 const getAll = async () => {
