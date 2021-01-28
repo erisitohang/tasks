@@ -18,7 +18,7 @@ services:
       - NODE_ENV=development
   client:
     build:
-      context: ./client/
+      context: ./client
     container_name: ens_client
     command: npm start
     volumes:
